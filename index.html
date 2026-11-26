@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest | Online Book Library</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #1d1d1d; font-family: Arial, sans-serif; color: #21133f; }
+    
+    .screen { width: 100%; max-width: 1100px; min-height: 100vh; margin: 0 auto 24px; background: #eeeaf7; overflow: hidden; }
+    .muted { color: #77718a; }
+
+    .topbar { min-height: 54px; padding: 0 5%; background: #172c3d; color: white; display: flex; align-items: center; justify-content: space-between; }
+    .brand { color: white; font-family: Georgia, serif; font-size: 18px; font-weight: bold; }
+    .brand small { display: block; color: #d9d2ed; font: 9px Arial, sans-serif; }
+    .navlinks { display: flex; align-items: center; gap: 22px; font-size: 12px; }
+    .navlinks a { color: white; }
+    .navlinks a:hover { color: #c5b2ff; }
+    .pill, .small-btn { display: inline-block; padding: 7px 16px; background: #6940bd; color: white; border-radius: 20px; font-size: 11px; }
+    .pill.light { background: #b9a4f4; color: #2d175b; }
+    .pill:hover, .small-btn:hover { background: #52309f; color: white; }
+    .book-card { height: 100%; padding: 13px 10px; background: white; border-radius: 8px; }
+    .book-card h6 { margin: 5px 0; font-size: 12px; font-weight: bold; }
+    .book-card p { margin-bottom: 10px; color: #777; font-size: 10px; }
+    .book-cover {
+
+      width: 110px;
+      height: 160px;
+      display: block;
+      margin: 0 auto 12px;
+      object-fit: cover;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+    .small-btn { display: block; padding: 7px 5px; text-align: center; border-radius: 5px; }
+
+    .banner { padding: 19px 5%; background: #b7a1f4; text-align: center; }
+    .banner h1 { margin: 0 0 4px; font-size: 25px; }
+    .banner p { margin: 0; font-size: 11px; }
+    .search { width: 100%; padding: 11px 14px; border: 0; border-radius: 7px; background: white; font-size: 11px; }
+    .search-link { display: block; height: 40px; color: #817a91; }
+    .category-chip { display: inline-block; margin: 3px; padding: 8px 15px; background: #f0eafa; color: #59428b; border-radius: 5px; font-size: 10px; }
+    .category-chip.active { background: #6940bd; color: white; }
+    #home .home-content { padding: 22px 5% 35px; }
+    #home .home-search { max-width: 480px; margin: 20px auto 22px; }
+    #home .popular-title { margin: 16px 0 12px; font-size: 16px; font-weight: bold; }
+    #category { background: white; }
+    #category .category-content { padding: 35px 6%; }
+    #category .book-card { border: 1px solid #eee9f6; }
+    #category .search { display: block; height: 42px; margin-bottom: 22px; }
+    .section-title { margin-bottom: 5px; font-size: 25px; font-weight: bold; }
+    .section-sub { margin-bottom: 22px; color: #817a91; font-size: 12px; }
+
+    #login { display: flex; align-items: center; justify-content: center; padding: 45px 7%; background: #e9e6f2; }
+    .login-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 7%; align-items: center; }
+    .login-art { text-align: center; }
+    .book-illustration-img {
+      width: 220px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 16px;
+    }
+    .login-art h1 { margin-top: 20px; color: #111; font-size: 29px; font-weight: bold; }
+    .login-art p { color: #9b82d6; font-size: 12px; }
+    .login-form { width: 100%; max-width: 360px; margin: auto; }
+    .login-form input { width: 100%; margin-bottom: 14px; padding: 12px 17px; border: 0; border-radius: 22px; font-size: 11px; }
+    .login-form .hint { margin-bottom: 10px; color: #4d4660; font-size: 10px; }
+    .login-form .social { display: block; margin-top: 9px; padding: 10px; background: white; color: #222; text-align: center; border-radius: 20px; font-size: 11px; font-weight: bold; }
+    .login-form .social.fb { background: #4264c9; color: white; }
+    .login-form .login-foot { margin-top: 15px; text-align: center; font-size: 11px; }
+
+    #details { background: #ebe7f4; }
+    .details-content { display: grid; grid-template-columns: 1fr 1.15fr; gap: 8%; padding: 40px 7%; align-items: center; }
+    .detail-cover {
+      width: 100%;
+      max-width: 280px;
+      height: 410px;
+      display: block;
+      margin: auto;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(33, 19, 63, 0.18);
+    }
+    .details-info h1 { margin-bottom: 8px; font-size: 27px; }
+    .details-info .author { color: #777; font-size: 13px; }
+    .price { margin: 18px 0; color: #8a39d0; font-size: 22px; font-weight: bold; }
+    .details-info p { color: #716b80; font-size: 12px; line-height: 1.7; }
+    .detail-tags span { display: inline-block; margin: 5px 5px 0 0; padding: 8px 12px; background: white; border-radius: 5px; font-size: 10px; }
+
+    #cart { background: #f7f4ff; }
+    .cart-content { padding: 28px 5%; }
+    .cart-heading { color: #28145c; font-size: 27px; font-weight: bold; }
+    .cart-row { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; padding: 13px; background: white; border-radius: 8px; }
+    .mini-cover {
+      width: 60px;
+      height: 86px;
+      flex-shrink: 0;
+      object-fit: cover;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+    .cart-row h6 { margin-bottom: 5px; font-size: 13px; font-weight: bold; }
+    .cart-row p { margin-bottom: 5px; color: #777; font-size: 11px; }
+    .cart-price { color: #6940bd; font-size: 14px; font-weight: bold; }
+    .stepper { display: flex; gap: 9px; align-items: center; margin-left: auto; padding: 5px 9px; background: #f0eafa; border-radius: 15px; font-size: 12px; }
+    .trash { margin-left: 10px; color: #6940bd; font-size: 17px; }
+    .summary { height: 100%; padding: 20px; background: white; border-radius: 8px; }
+    .summary h5 { margin-bottom: 20px; font-size: 17px; font-weight: bold; }
+    .summary-line { display: flex; justify-content: space-between; margin: 14px 0; font-size: 12px; }
+    .summary .total { padding-top: 15px; border-top: 1px solid #eee; font-size: 16px; font-weight: bold; }
+
+    #about { background: #f2edff; }
+    .about-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 5%; align-items: center; padding: 65px 6% 40px; }
+    .eyebrow { display: inline-block; margin-bottom: 14px; padding: 7px 14px; background: #e0d2ff; color: #6a45b7; border-radius: 20px; font-size: 11px; }
+    .about-copy h1 { color: #382071; font-size: 36px; font-weight: bold; }
+    .about-copy p { color: #716b80; font-size: 13px; line-height: 1.8; }
+    .about-art { text-align: center; }
+    .about-art-img {
+      width: 320px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 16px;
+    }
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 0 6% 40px; }
+    .feature { display: flex; align-items: center; gap: 12px; padding: 18px; background: white; border-radius: 13px; }
+    .feature-icon { width: 42px; height: 42px; flex-shrink: 0; display: grid; place-items: center; background: #eee5ff; color: #7044c4; border-radius: 50%; font-size: 20px; }
+    .feature h6 { margin-bottom: 5px; font-size: 12px; font-weight: bold; }
+    .feature p { margin: 0; color: #827b91; font-size: 10px; }
+    .footer-note { padding: 15px; color: #928aa4; text-align: center; font-size: 10px; }
+  </style>
+</head>
+<body>
+
+  <section class="screen" id="login">
+    <div class="login-grid">
+      <div class="login-art">
+        <img class="book-illustration-img" src="c:\Users\komal\OneDrive\Pictures\Screenshots\Screenshot 2026-11-23 110920.png" alt="BookNest Logo Illustration">
+        <h1>SIGN UP</h1>
+        <p>“Every book is a new adventure waiting to begin.”<br>— Your journey starts with BookNest!</p>
+      </div>
+      <form class="login-form">
+        <input type="text" placeholder="♙  ENTER FULL NAME">
+        <input type="email" placeholder="✉  ENTER EMAIL ADDRESS">
+        <input type="password" placeholder="♙  ENTER PASSWORD">
+        <p class="hint">By registering, I agree to the Terms and Conditions of the site.</p>
+        <a class="pill w-100 text-center" href="#home">REGISTER</a>
+        <a class="social fb" href="#home">f&nbsp; FACEBOOK</a>
+        <a class="social" href="#home">🌐 GOOGLE</a>
+        <div class="login-foot">Already have an account? <a href="#home" style="color:#6940bd;font-weight:bold">Login here</a></div>
+      </form>
+    </div>
+  </section>
+
+  <section class="screen" id="home">
+    <header class="topbar">
+      <a class="brand" href="#home">BookNest<small>Find Your Favourite Books</small></a>
+      <nav class="navlinks">
+        <a href="#home">HOME</a><a href="#category">CATEGORY</a><a href="#cart">CART</a><a href="#about">ABOUT US</a>
+        <a class="pill light" href="#login">Sign Up</a>
+      </nav>
+    </header>
+    <div class="banner text-center">
+      <h1>Find Your Next Favourite Book!</h1>
+      <p>Explore thousands of books and discover something new every day.</p>
+    </div>
+    <div class="home-content">
+      <div class="home-search"><a class="search search-link" href="#category">⌕ &nbsp; Search books or Authors</a></div>
+      <h6 class="fw-bold mb-2">Browse Categories</h6>
+      <div class="mb-3">
+        <span class="category-chip">Fiction</span>
+        <span class="category-chip">Science</span>
+        <span class="category-chip">History</span>
+        <span class="category-chip">Technology</span>
+        <span class="category-chip">Self Help</span>
+      </div>
+      <div class="popular-title">Popular Books</div>
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="book-card">
+            <img class="book-cover" src="c:\Users\komal\Downloads\p&p.png" alt="Pride and Prejudice">
+            <h6>Pride and Prejudice</h6>
+            <p>Jane Austen</p>
+            <a class="small-btn">View Details</a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="book-card">
+            <img class="book-cover" src="c:\Users\komal\Downloads\art_war.png" alt="The Art of War">
+            <h6>The Art of War</h6>
+            <p>Sun Tzu</p>
+            <a class="small-btn">View Details</a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="book-card">
+            <img class="book-cover" src="c:\Users\komal\Downloads\garden.png" alt="The Secret Garden">
+            <h6>The Secret Garden</h6>
+            <p>Frances Hodgson Burnett</p>
+            <a class="small-btn">View Details</a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="book-card">
+            <img class="book-cover" src="c:\Users\komal\Downloads\library.png" alt="The Midnight Library">
+            <h6>The Midnight Library</h6>
+            <p>Matt Haig</p>
+            <a class="small-btn">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="category">
+    <header class="topbar">
+      <a class="brand" href="#home">BookNest<small>Find Your Favourite Books</small></a>
+      <nav class="navlinks"><a href="#home">HOME</a><a href="#category">CATEGORY</a><a href="#cart">CART</a><a href="#about">ABOUT US</a><a class="pill light" href="#login">Sign Up</a></nav>
+    </header>
+    <div class="category-content">
+      <h1 class="section-title">Explore Books</h1>
+      <p class="section-sub">Discover books from different categories.</p>
+      <input class="search mb-4" type="search" placeholder="⌕  Search books or authors...">
+      <h6 class="fw-bold" style="font-size:13px">Browse Categories</h6>
+      <div class="mb-3">
+        <a class="category-chip active" href="#category">All Books</a><a class="category-chip" href="#category">Fiction</a><a class="category-chip" href="#category">Science</a><a class="category-chip" href="#category">History</a><a class="category-chip" href="#category">Technology</a><a class="category-chip" href="#category">Self Help</a>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mb-2"><h6 class="fw-bold mb-0" style="font-size:13px">Available Books</h6><span class="muted" style="font-size:10px">Showing 4 books</span></div>
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="book-card">
+            <img class="book-cover" src="c:\Users\komal\Downloads\alche.png" alt="The Alchemist">
+            <h6>The Alchemist</h6>
+            <p>Paulo Coelho</p>
+            <a class="small-btn">View Details</a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="book-card">
+            <img class="book-cover" src="c:\Users\komal\Downloads\atomic.png" alt="Atomic Habits">
+            <h6>Atomic Habits</h6>
+            <p>James Clear</p>
+            <a class="small-btn">View Details</a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="book-card">
+            <img class="book-cover" src="c:\Users\komal\Downloads\money.png" alt="The Psychology of Money">
+            <h6>The Psychology of Money</h6>
+            <p>Morgan Housel</p>
+            <a class="small-btn">View Details</a>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="book-card">
+            <img class="book-cover" src="c:\Users\komal\Downloads\library.png" alt="The Midnight Library">
+            <h6>The Midnight Library</h6>
+            <p>Matt Haig</p>
+            <a class="small-btn" href="#details">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="details">
+    <header class="topbar">
+      <a class="brand" href="#home">BookNest<small>Find Your Favourite Books</small></a>
+      <nav class="navlinks"><a href="#home">HOME</a><a href="#category">CATEGORY</a><a href="#cart">CART</a><a href="#about">ABOUT US</a><a class="pill light" href="#login">Sign Up</a></nav>
+    </header>
+    <div class="details-content">
+      <img class="detail-cover" src="c:\Users\komal\Downloads\library.png" alt="The Midnight Library">
+      <div class="details-info">
+        <h1>The Midnight Library</h1>
+        <div class="author">by Matt Haig</div>
+        <div class="price">₹799</div>
+        <a class="pill" href="#cart">Add to Cart</a>
+        <span class="pill light ms-2">♡ Wishlist</span>
+        <div class="mt-4"><h6 class="fw-bold">Book Description</h6><p>Between life and death there is a library, and within that library, the shelves go on forever. Every book offers a chance to try another life you could have lived. Would you have done anything different, if you had the chance to undo your regrets?</p></div>
+        <div class="detail-tags"><span>Category: Fiction</span><span>Language: English</span><span>Pages: 304</span><span>Availability: In Stock</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="cart">
+    <header class="topbar">
+      <a class="brand" href="#home">BookNest<small>Find Your Favourite Books</small></a>
+      <nav class="navlinks"><a href="#home">HOME</a><a href="#category">CATEGORY</a><a href="#cart">CART</a><a href="#about">ABOUT US</a><a class="pill light" href="#login">Sign Up</a></nav>
+    </header>
+    <div class="cart-content">
+      <div class="d-flex align-items-center gap-3 mb-1"><span style="font-size:28px">🛒</span><div><div class="cart-heading">Your Cart</div><div class="muted" style="font-size:12px">Review your items before checkout</div></div></div>
+      <div class="row g-3 mt-4">
+        <div class="col-lg-8">
+          <div class="cart-row">
+            <img class="mini-cover" src="c:\Users\komal\Downloads\library.png" alt="The Midnight Library">
+            <div><h6>The Midnight Library</h6><p>Matt Haig</p><div class="cart-price">₹799</div></div>
+            <div class="stepper"><span>−</span><span>1</span><span>+</span></div>
+            <a class="trash" href="#cart" aria-label="Remove item">X</a>
+          </div>
+          <div class="cart-row">
+            <img class="mini-cover" src="c:\Users\komal\Downloads\atomic.png" alt="Atomic Habits">
+            <div><h6>Atomic Habits</h6><p>James Clear</p><div class="cart-price">₹699</div></div>
+            <div class="stepper"><span>−</span><span>1</span><span>+</span></div>
+            <a class="trash" href="#cart" aria-label="Remove item">X</a>
+          </div>
+          <a href="#category" class="muted" style="font-size:12px">← &nbsp;Continue Shopping</a>
+        </div>
+        <div class="col-lg-4"><div class="summary"><h5>Order Summary</h5><div class="summary-line"><span>Subtotal</span><span>₹1498</span></div><div class="summary-line"><span>Delivery</span><span>Free</span></div><div class="summary-line total"><span>Total</span><span>₹1498</span></div><span class="pill w-100 text-center mt-3" style="cursor:default">Proceed to Checkout&nbsp; →</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="about">
+    <header class="topbar">
+      <a class="brand" href="#home">BookNest<small>Find Your Favourite Books</small></a>
+      <nav class="navlinks"><a href="#home">HOME</a><a href="#category">CATEGORY</a><a href="#cart">CART</a><a href="#about">ABOUT US</a><a class="pill light" href="#login">Sign Up</a></nav>
+    </header>
+    <div class="about-hero">
+      <div class="about-copy">
+        <span class="eyebrow">ABOUT US</span>
+        <h1>Welcome to<br>BookNest</h1>
+        <p>Your Digital Library, Anytime, Anywhere.</p>
+        <p>At BookNest, we believe in the power of books to inspire, educate and entertain. Our mission is to make reading accessible to everyone, by offering a wide collection of books in one simple and user-friendly platform.</p>
+        <a href="#category" class="pill">▣ &nbsp; Explore Books</a>
+      </div>
+      <div class="about-art">
+        <img class="about-art-img" src="c:\Users\komal\OneDrive\Pictures\Screenshots\Screenshot 2026-11-23 120022.png" alt="BookNest Illustration">
+      </div>
+    </div>
+    <div class="features">
+      <div class="feature"><div class="feature-icon">▣</div><div><h6>Wide Collection</h6><p>Explore a vast collection of books across genres.</p></div></div>
+      <div class="feature"><div class="feature-icon">ϟ</div><div><h6>Easy Access</h6><p>Read and discover books with ease.</p></div></div>
+      <div class="feature"><div class="feature-icon">♥</div><div><h6>For Book Lovers</h6><p>A perfect place for readers, by readers.</p></div></div>
+    </div>
+    <div class="footer-note">© 2026 BookNest. Made for book lovers.</div>
+  </section>
+
+</body>
+</html>
